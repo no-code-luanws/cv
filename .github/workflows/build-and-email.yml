@@ -20,9 +20,9 @@ jobs:
       run: |
         docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace latex-compiler bash compile.sh
         
-    - name: List generated files (debug)
+    - name: Rename PDF file
       run: |
-        ls -la documents/out/
+        cp documents/out/main.pdf CV.pdf
         
     - name: Send PDF by email
       uses: dawidd6/action-send-mail@v3
@@ -46,4 +46,4 @@ jobs:
           
           Atenciosamente,
           GitHub Actions
-        attachments: documents/out/main.pdf
+        attachments: CV.pdf
