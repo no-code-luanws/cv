@@ -1,0 +1,48 @@
+name: Build LaTeX and Send PDF by Email
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-email:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Build Docker image
+      run: docker build -t latex-compiler .
+      
+    - name: Compile LaTeX to PDF
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace latex-compiler bash compile.sh
+        
+    - name: List generated files (debug)
+      run: |
+        ls -la documents/out/
+        
+    - name: Send PDF by email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "CV PDF Atualizado - ${{ github.sha }}"
+        to: luan.w.silveira@gmail.com
+        from: ${{ secrets.EMAIL_USERNAME }}
+        body: |
+          Olá!
+          
+          Seu CV foi compilado com sucesso após o push no commit ${{ github.sha }}.
+          
+          O PDF atualizado está em anexo.
+          
+          Commit: ${{ github.event.head_commit.message }}
+          Data: ${{ github.event.head_commit.timestamp }}
+          
+          Atenciosamente,
+          GitHub Actions
+        attachments: documents/out/main.pdf
