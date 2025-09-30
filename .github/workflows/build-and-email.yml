@@ -2,7 +2,8 @@ name: Build LaTeX and Send PDF by Email
 
 on:
   push:
-    branches: [ main ]
+    branches:
+        - main
 
 jobs:
   build-and-email:
