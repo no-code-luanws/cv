@@ -1,15 +1,24 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Compile LaTeX",
-            "type": "shell",
-            "command": "./compile.sh",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile LaTeX",
+      "type": "shell",
+      "command": "docker build -t latex-compiler-cv . && docker run --rm -v \"${workspaceFolder}:/workspace\" -w /workspace latex-compiler-cv bash compile.sh",
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": [
+            "/d",
+            "/c"
+          ]
         }
-    ]
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
 }
