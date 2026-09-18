@@ -13,13 +13,29 @@ Guia rápido para trabalhar neste repositório de currículo.
 
 ## Como gerar o PDF
 
+### No VS Code (Windows + Docker Desktop)
+
+Rode a task **"Compile LaTeX"** (`Ctrl+Shift+B`). Ela builda a imagem Docker a
+partir do `Dockerfile` (base `texlive/texlive`, já com LaTeX completo) e roda
+`compile.sh` dentro do container, montando o repositório como volume — não
+precisa de LaTeX instalado no host nem de abrir um dev container manualmente.
+Equivalente manual:
+
+```sh
+docker build -t latex-compiler-cv .
+docker run --rm -v "${PWD}:/workspace" -w /workspace latex-compiler-cv bash compile.sh
+```
+
+### Direto (sessão nova / remota, sem Docker)
+
 ```sh
 bash compile.sh
 ```
 
-O PDF sai em `documents/out/main.pdf` (ignorado pelo git — é artefato de build).
+O PDF sai em `documents/out/main.pdf` em ambos os casos (ignorado pelo git —
+é artefato de build).
 
-### Pré-requisitos de ambiente (sessão nova / remota)
+### Pré-requisitos de ambiente (sessão nova / remota, sem Docker)
 
 O ambiente remoto **não** vem com LaTeX instalado. Antes do primeiro build,
 instale os pacotes abaixo (leva alguns minutos):
